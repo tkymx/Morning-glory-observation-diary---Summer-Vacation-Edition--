@@ -19,6 +19,8 @@ public class CameraView extends SurfaceView implements Callback,PictureCallback 
 	private SurfaceHolder 	holder;	//ホルダー
 	private Camera			camera;	//カメラ
 	
+	private boolean			touch = false; //タッチされたかどうか
+	
 	public CameraView(Context context) {
 		super(context);
 		
@@ -55,7 +57,7 @@ public class CameraView extends SurfaceView implements Callback,PictureCallback 
 	        Log.d("system1", "ピクチャの大きさ"+camera.getParameters().getPictureSize().width+" "+camera.getParameters().getPictureSize().height);		
 			
 	        Camera.Parameters params = camera.getParameters();
-	        
+	        	        
 	        //縦向きする
 	        params.setRotation(90);
 	        camera.setDisplayOrientation(90);
@@ -64,21 +66,32 @@ public class CameraView extends SurfaceView implements Callback,PictureCallback 
 	        //Preview解像度取得
 	        List<Size> supportedSizes = params.getSupportedPreviewSizes();
 	        if (supportedSizes != null && supportedSizes.size() > 1) {
-	        	//サイズの取得
-	        	Size size = supportedSizes.get(0);	        	
-		        //プレビューの解像度を設定する
-	            params.setPreviewSize(size.width, size.height);
+	        	Size ok = supportedSizes.get(0);
+	        	for( Size size : supportedSizes)
+	        	{	        		
+	        		//4:3に合わせるため
+	        		if( Math.abs(size.width*3 - size.height*4) < Math.abs(size.width*9 - size.height*16) )
+	        		{
+	        			ok = size;
+	        			break;
+	        		}
+	        	}
+	            params.setPreviewSize(ok.width, ok.height);
 	        }
 	        //Picture解像度取得
 	        List<Size> supportedPictureSizes = params.getSupportedPictureSizes();
 	        if (supportedPictureSizes != null && supportedPictureSizes.size() > 1) {
+	        	Size ok = supportedPictureSizes.get(0);
 	        	for( Size size : supportedPictureSizes)
-	        	{
-	        		//解像度の指定
-		            params.setPictureSize(size.width, size.height);	     
-	        		//理想解像度
-	        		if( size.width == 1920 )break;
+	        	{	        		
+	        		//4:3に合わせるため
+	        		if( Math.abs(size.width*3 - size.height*4) < Math.abs(size.width*9 - size.height*16) )
+	        		{
+	        			ok = size;
+	        			break;
+	        		}
 	        	}
+	            params.setPictureSize(ok.width, ok.height);
 	        } 			
 	  	     	        
 	        camera.setParameters(params);
@@ -108,10 +121,15 @@ public class CameraView extends SurfaceView implements Callback,PictureCallback 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		
-		if( event.getAction() == MotionEvent.ACTION_DOWN )
+		if( !touch )
 		{
-			//カメラのスクリーンショットの取得
-			camera.takePicture(null, null, this);
+			if( event.getAction() == MotionEvent.ACTION_DOWN )
+			{
+				//カメラのスクリーンショットの取得
+				camera.takePicture(null, null, this);
+				//タッチ状態にする
+				touch = true;
+			}
 		}
 		return true;
 	}
@@ -125,6 +143,10 @@ public class CameraView extends SurfaceView implements Callback,PictureCallback 
 		{
 			String path = Environment.getExternalStorageDirectory()+"/test.jpg";
 			data2file(data,path );
+			
+			//タッチを解除
+			touch = false;
+			
 		}		
 		catch( Exception e )
 		{			
