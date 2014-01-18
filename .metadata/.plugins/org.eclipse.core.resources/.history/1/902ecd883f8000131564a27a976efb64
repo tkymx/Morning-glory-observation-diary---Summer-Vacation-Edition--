@@ -1,0 +1,62 @@
+package com.example.morninggloryobservationdiary;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        //フルスクリーンの設定
+        getWindow().clearFlags( WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN );
+        getWindow().addFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN );
+        
+        requestWindowFeature( Window.FEATURE_NO_TITLE );
+        
+        //レイアウト
+        LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        
+        //テキストビューの追加
+        TextView tv = new TextView(this);
+        tv.setText("カメラのテスト");
+        tv.setTextSize(20);
+        ll.addView(tv);
+
+        LinearLayout ll2 = new LinearLayout(this);
+        ll2.setOrientation( LinearLayout.HORIZONTAL );
+        
+        //テキストビューの追加
+        TextView tvv = new TextView(this);
+        tvv.setText("カメラのテスト2");
+        tvv.setTextSize(20);
+        ll2.addView(tvv);
+        
+        //カメラの画面の大きさを指定する
+        CameraView cameraView = new CameraView(this);        
+        ll2.addView(cameraView, 1080/4 , 1920/4);
+        
+        ll.addView(ll2);
+        
+        setContentView( ll );
+        
+//        setContentView(R.layout.activity_main);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    
+}

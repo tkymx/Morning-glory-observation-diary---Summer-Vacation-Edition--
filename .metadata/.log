@@ -263,3 +263,26 @@ Binding(CTRL+SHIFT+\,
 
 !ENTRY org.eclipse.ui 4 4 2014-01-18 20:17:54.115
 !MESSAGE Referenced part does not exist yet: org.eclipse.ui.views.ProblemView.
+
+!ENTRY org.eclipse.jdt.debug.ui 4 4 2014-01-18 22:19:05.420
+!MESSAGE com.sun.jdi.VMDisconnectedException: Got IOException from Virtual Machine occurred while retrieving value.
+!STACK 0
+com.sun.jdi.VMDisconnectedException: Got IOException from Virtual Machine
+	at org.eclipse.jdi.internal.connect.PacketReceiveManager.getReply(PacketReceiveManager.java:179)
+	at org.eclipse.jdi.internal.connect.PacketReceiveManager.getReply(PacketReceiveManager.java:197)
+	at org.eclipse.jdi.internal.MirrorImpl.requestVM(MirrorImpl.java:191)
+	at org.eclipse.jdi.internal.MirrorImpl.requestVM(MirrorImpl.java:226)
+	at org.eclipse.jdi.internal.ArrayReferenceImpl.getValues(ArrayReferenceImpl.java:121)
+	at org.eclipse.jdi.internal.ArrayReferenceImpl.getValue(ArrayReferenceImpl.java:72)
+	at org.eclipse.jdt.internal.debug.core.model.JDIArrayEntryVariable.retrieveValue(JDIArrayEntryVariable.java:87)
+	at org.eclipse.jdt.internal.debug.core.model.JDIVariable.getCurrentValue(JDIVariable.java:69)
+	at org.eclipse.jdt.internal.debug.core.model.JDIVariable.getValue(JDIVariable.java:92)
+	at org.eclipse.jdt.internal.debug.ui.JavaDetailFormattersManager$EvaluationListener.appendArrayDetail(JavaDetailFormattersManager.java:705)
+	at org.eclipse.jdt.internal.debug.ui.JavaDetailFormattersManager$EvaluationListener$1.run(JavaDetailFormattersManager.java:673)
+	at org.eclipse.jdt.internal.debug.core.model.JDIThread.runEvaluation(JDIThread.java:764)
+	at org.eclipse.jdt.internal.debug.ui.JavaDetailFormattersManager$EvaluationListener.valueToString(JavaDetailFormattersManager.java:682)
+	at org.eclipse.jdt.internal.debug.ui.JavaDetailFormattersManager.resolveFormatter(JavaDetailFormattersManager.java:170)
+	at org.eclipse.jdt.internal.debug.ui.JavaDetailFormattersManager.access$1(JavaDetailFormattersManager.java:143)
+	at org.eclipse.jdt.internal.debug.ui.JavaDetailFormattersManager$1.run(JavaDetailFormattersManager.java:138)
+	at org.eclipse.jdt.internal.debug.core.model.JDIThread$ThreadJob.run(JDIThread.java:3157)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)

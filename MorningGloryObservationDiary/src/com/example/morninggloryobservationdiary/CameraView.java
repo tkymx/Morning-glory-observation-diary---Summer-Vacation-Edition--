@@ -1,11 +1,14 @@
 package com.example.morninggloryobservationdiary;
 
 import java.io.FileOutputStream;
+import java.util.List;
 
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.Size;
 import android.os.Environment;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -36,16 +39,57 @@ public class CameraView extends SurfaceView implements Callback,PictureCallback 
 	}
 
 	//サーフェス生成イベントの処理
+	/**
+	 * 縦表示用に縦横サイズを逆にしてみた。 
+	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 		
 		//カメラの初期化
 		try{
 			camera = Camera.open();
+			
 			camera.setPreviewDisplay(holder);
+			
+	        Log.d("system1", "プレビュの大きさ"+camera.getParameters().getPreviewSize().width+" "+camera.getParameters().getPreviewSize().height);
+	        Log.d("system1", "ピクチャの大きさ"+camera.getParameters().getPictureSize().width+" "+camera.getParameters().getPictureSize().height);		
+			
+	        Camera.Parameters params = camera.getParameters();
+	        
+	        //縦向きする
+	        params.setRotation(90);
+	        camera.setDisplayOrientation(90);
+	        
+	        
+	        //Preview解像度取得
+	        List<Size> supportedSizes = params.getSupportedPreviewSizes();
+	        if (supportedSizes != null && supportedSizes.size() > 1) {
+	        	//サイズの取得
+	        	Size size = supportedSizes.get(0);	        	
+		        //プレビューの解像度を設定する
+	            params.setPreviewSize(size.width, size.height);
+	        }
+	        //Picture解像度取得
+	        List<Size> supportedPictureSizes = params.getSupportedPictureSizes();
+	        if (supportedPictureSizes != null && supportedPictureSizes.size() > 1) {
+	        	for( Size size : supportedPictureSizes)
+	        	{
+	        		//解像度の指定
+		            params.setPictureSize(size.width, size.height);	     
+	        		//理想解像度
+	        		if( size.width == 1920 )break;
+	        	}
+	        } 			
+	  	     	        
+	        camera.setParameters(params);
+	        
+	        Log.d("system2", "プレビュの大きさ"+camera.getParameters().getPreviewSize().width+" "+camera.getParameters().getPreviewSize().height);
+	        Log.d("system2", "ピクチャの大きさ"+camera.getParameters().getPictureSize().width+" "+camera.getParameters().getPictureSize().height);	        
+	        
 		}
 		catch( Exception e )
-		{			
+		{	
+			e.printStackTrace();
 		}	
 	}
 
