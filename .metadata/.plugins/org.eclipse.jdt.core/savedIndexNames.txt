@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+C:\Users\ultra-tkymx\Documents\GitHub\Morning-glory-observation-diary---Summer-Vacation-Edition--\.metadata\.plugins\org.eclipse.jdt.core
+1583415722.index
+2169864714.index
+2603711453.index
